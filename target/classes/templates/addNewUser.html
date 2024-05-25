@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>CRM</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+<script>
+$(document).ready(function() {
+	countyDropDown();
+});
+function countyDropDown(){
+var selectedStateId = $('#stateDropdown').val();
+        if (selectedStateId) {
+            $.ajax({
+                url: '/counties',
+                data: { 'stateId': selectedStateId },
+                success: function(counties) {
+                   var  $countyDropdown = $('#countyDropdown').empty();
+                    $.each(counties, function(index, county) {
+                        $countyDropdown.append($('<option></option>').attr('value', county.countyId).text(county.countyName));
+                    });
+					var firstValue = $countyDropdown.find('option:first').val();
+					$countyDropdown.val(firstValue);
+					departmentDropDown();
+                }
+            });
+			
+        } else {
+            $('#countyDropdown').empty().append('<option value="">Select a County</option>');
+        }
+		//alert($('#countyDropdown').val());
+		
+	
+}
+function departmentDropDown(){
+	var selectedStateId = $('#stateDropdown').val();
+	var selectedCountyId = $('#countyDropdown').val();
+        if (selectedStateId) {
+            $.ajax({
+                url: '/loaddept',
+                data: { 'stateId': selectedStateId ,
+						'countyId' : selectedCountyId
+					  },
+                success: function(departments) {
+                    var $deptDropDown = $('#deptDropDown').empty();
+                   // $countyDropdown.empty().append('<option value="">Select a County</option>');
+                    $.each(departments, function(index, department) {
+                        $deptDropDown.append($('<option></option>').attr('value', department.departmentId).text(department.departmentName));
+                    });
+                }
+            });
+        } else {
+            $('#deptDropDown').empty().append('<option value="">Select a deptDropDown</option>');
+        } 
+}
+	
+</script>
+</head>
+<body>
+	<div th:insert="~{fragments/navbar :: navbar}">  </div>
+	<div class="container">
+		<h2 align = "center">Add New User</h2>
+		<form action="#" th:action="@{/addUser}" th:object="${user}"
+			method="POST">
+			<label for="stateDropdown">Choose State</label>
+			<select class="form-control mb-4 col-4" id = "stateDropdown" th:field="*{state}" onchange="countyDropDown()">
+				<option th:each="state:${states}" 
+						th:text="${state.stateName}"
+						th:value="${state.stateId}" ></option> 
+			</select> 
+			<label for="countyDropDown">Choose County</label>
+				<select class="form-control mb-4 col-4" id = "countyDropdown" th:field="*{county}" onchange="departmentDropDown()">
+			</select> 
+			<label for="deptDropDown">Choose Department</label>
+				<select class="form-control mb-4 col-4" th:field="*{department}" id = "deptDropDown" >
+			</select> 
+			<label for="userName">User Name</label>
+			<input type="text"
+				th:field="*{userName}" placeholder="User Name"
+				class="form-control mb-4 col-4">
+			<label for="emailId">Email ID</label>
+			<input type="text"
+				th:field="*{emailId}" placeholder="Email ID"
+				class="form-control mb-4 col-4">
+			<button type="submit" class="btn btn-info col-2">Save
+				User</button>
+		</form>
+	</div>
+	<div class="container">
+		<hr>
+<table style="width:100%" border="2"
+		class = "table table-striped table-responsive-md">
+	<thead>
+<tr>
+	<th>User Id</th>
+	<th>State</th>
+	<th>County</th>
+	<th>Department</th>
+	<th>User Name</th>
+	<th>Email Address</th>
+	<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr th:each="user:${allUserList}">
+	<td th:text="${user.userId}"></td>
+	<td th:text="${user.state.stateName}"></td>
+	<td th:text="${user.county.countyName}"></td>
+	<td th:text="${user.department.departmentName}"></td>
+	<td th:text="${user.userName}"></td>
+	<td th:text="${user.emailId}"></td>
+	<td> <a th:href="@{/updateUser/{id}(id=${user.userId})}"
+				class="btn btn-primary">Update</a>
+				<a th:href="@{/deleteUser/{id}(id=${user.userId})}"
+				class="btn btn-danger">Delete</a>
+	</td>
+</tr>
+</tbody>
+</table>
+		 <a th:href="@{/}"> Back to index page</a> 
+	</div>
+</body>
+</html>

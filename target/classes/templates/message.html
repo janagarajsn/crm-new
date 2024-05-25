@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Message Fragment</title>
+</head>
+<body>
+    
+    <div id="message-content" th:fragment="message-content">
+        <p id= "responseText" th:text="${msg}">Default message if nothing is passed</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>CRM</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	crossorigin="anonymous">
+</head>
+<body>
+	<div th:insert="~{fragments/navbar :: navbar}">  </div>
+	<div class="container">
+		<h2 align = "center">New State</h2>
+		<form action="#" th:action="@{/addState}" th:object="${state}"
+			method="POST">
+			<label for="stateCode">State Code</label> 
+			<input type="text" th:field="*{stateCode}" placeholder="State Code"
+				class="form-control mb-4 col-4">
+				<label for="stateName">State Name</label> 
+			<input type="text"
+				th:field="*{stateName}" placeholder="State Name"
+				class="form-control mb-4 col-4">
+
+			<button type="submit" class="btn btn-info col-2">Save
+				State</button>
+		</form>
+	</div>
+	<div class="container">
+		<hr>
+<table style="width:80%" border="2"
+		class = "table table-striped table-responsive-md">
+	<thead>
+<tr>
+	<th>State Code</th>
+	<th>State Name</th>
+	<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr th:each="state:${allStateList}">
+	<td th:text="${state.stateId}"></td>
+		<td th:text="${state.stateCode}"></td>
+		<td th:text="${state.stateName}"></td>
+		<td> <a th:href="@{/updateState/{id}(id=${state.stateId})}"
+				class="btn btn-primary">Update</a>
+				<a th:href="@{/deleteState/{id}(id=${state.stateId})}"
+				class="btn btn-danger">Delete</a>
+	</td>
+</tr>
+</tbody>
+</table>
+		 <a th:href="@{/}"> Back to index page</a> 
+	</div>
+</body>
+</html>

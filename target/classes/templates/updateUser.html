@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>CRM</title>
+
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+<script>
+$(document).ready(function() {
+	countyDropDown();
+});
+function countyDropDown(){
+var selectedStateId = $('#stateDropdown').val();
+        if (selectedStateId) {
+            $.ajax({
+                url: '/counties',
+                data: { 'stateId': selectedStateId },
+                success: function(counties) {
+                   var  $countyDropdown = $('#countyDropdown').empty();
+                    $.each(counties, function(index, county) {
+                        $countyDropdown.append($('<option></option>').attr('value', county.countyId).text(county.countyName));
+                    });
+					var firstValue = $countyDropdown.find('option:first').val();
+					$countyDropdown.val(firstValue);
+					departmentDropDown();
+                }
+            });
+			
+        } else {
+            $('#countyDropdown').empty().append('<option value="">Select a County</option>');
+        }
+		//alert($('#countyDropdown').val());
+		
+	
+}
+function departmentDropDown(){
+	var selectedStateId = $('#stateDropdown').val();
+	var selectedCountyId = $('#countyDropdown').val();
+        if (selectedStateId) {
+            $.ajax({
+                url: '/loaddept',
+                data: { 'stateId': selectedStateId ,
+						'countyId' : selectedCountyId
+					  },
+                success: function(departments) {
+                    var $deptDropDown = $('#deptDropDown').empty();
+                   // $countyDropdown.empty().append('<option value="">Select a County</option>');
+                    $.each(departments, function(index, department) {
+                        $deptDropDown.append($('<option></option>').attr('value', department.departmentId).text(department.departmentName));
+                    });
+                }
+            });
+        } else {
+            $('#deptDropDown').empty().append('<option value="">Select a deptDropDown</option>');
+        } 
+}
+	
+</script>
+</head>
+<body>
+	<div th:insert="~{fragments/navbar :: navbar}">  </div>
+	<div class="container">
+		<hr>
+		<h2 align = "center">Update User</h2>
+		
+		<form action="#" th:action="@{/addUser}" th:object="${user}"
+			method="POST">
+			<input type="hidden" th:field="*{userId}" />
+			<label for="state">Choose State</label>
+			<select class="form-control mb-4 col-4" th:field="*{state}" >
+				<option th:each="state:${states}" 
+						th:text="${state.stateName}"
+						th:value="${state.stateId}" ></option> 
+			</select> 
+			<label for="county">Choose County</label>
+				<select class="form-control mb-4 col-4" th:field="*{county.countyName}" id = "countyDropdown" onchange="countyDropDown()">
+				<option th:each="county:${counties}" 
+						th:text="${county.countyName}"
+						th:value="${county.countyId}" ></option> 
+			</select> 
+			<label for="department">Choose Department</label>
+				<select class="form-control mb-4 col-4" th:field="*{department.departmentName}" onchange="departmentDropDown()">
+				<option th:each="department:${departments}" 
+						th:text="${department.departmentName}"
+						th:value="${department.departmentId}" ></option> 
+			</select> 
+			<label for="userName">User Name</label>
+			<input type="text"
+				th:field="*{userName}" placeholder="User Name"
+				class="form-control mb-4 col-4">
+			<label for="emailId">Email ID</label>
+			<input type="text"
+				th:field="*{emailId}" placeholder="Email ID"
+				class="form-control mb-4 col-4">
+			<button type="submit" class="btn btn-info col-2">Save
+				User</button>
+		</form>
+		<hr>
+		
+		<a th:href = "@{/}"> Back to index page </a>
+	</div>
+</body>
+</html>
