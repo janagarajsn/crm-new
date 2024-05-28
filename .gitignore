@@ -1,5 +1,3 @@
 *.class
 *.jar
 target/
-# .gitignore
-src/main/resources/application.properties
