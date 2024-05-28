@@ -60,7 +60,7 @@ public class UserService {
         return user;
     }
 
-public String findEmailAddress(Integer departmentId, Integer countyId, Integer stateId) {
+public List<String> findEmailAddress(Integer departmentId, Integer countyId, Integer stateId) {
     return userRepository.findEmailByStateCountyDepartment(stateId, countyId, departmentId);
 
 }

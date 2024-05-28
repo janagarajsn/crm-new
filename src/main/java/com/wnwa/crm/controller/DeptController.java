@@ -33,17 +33,18 @@ public class DeptController {
     @GetMapping("/")
     public String viewHomePage(Model model) {
         model.addAttribute("status", new DepartmentStatus());
+        Integer statusID = deptService.getStatus().get(0).getStatusId();
         model.addAttribute("department", new Department());
         model.addAttribute("allDepartmentList", deptService.getDepartments());
+        model.addAttribute("selectedDepartmentList", deptService.getSelectedDepts(statusID));
         return "index";
     }
 
     @PostMapping("/getDepartmentDetails")
     public String getDepartmentDetails(Model model,@ModelAttribute("department") Department department) {
-        System.out.println("********************"+department.getStatus().getStatusId());
         model.addAttribute("deptStatus", deptService.getStatus());
        // model.addAttribute("allDepartmentList", deptService.getDepartments());
-        model.addAttribute("allDepartmentList", deptService.getSelectedDepts(department.getStatus().getStatusId()));
+        model.addAttribute("selectedDepartmentList", deptService.getSelectedDepts(department.getStatus().getStatusId()));
         return "index";
     }
     @GetMapping("/addDepartment")
