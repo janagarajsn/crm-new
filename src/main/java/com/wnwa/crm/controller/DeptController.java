@@ -25,7 +25,7 @@ import com.wnwa.crm.service.StateService;
 public class DeptController {
     @Autowired
     private DepartmentService deptService;
-     @Autowired
+    @Autowired
     private CountyService countyService;
     @Autowired
     private StateService stateService;
@@ -33,7 +33,12 @@ public class DeptController {
     @GetMapping("/")
     public String viewHomePage(Model model) {
         model.addAttribute("status", new DepartmentStatus());
-        Integer statusID = deptService.getStatus().get(0).getStatusId();
+        List<DepartmentStatus> statusList = deptService.getStatus();
+        Integer statusID = 0;
+        if (statusList != null && !statusList.isEmpty()) {
+             statusID = statusList.get(0).getStatusId();
+        }
+       
         model.addAttribute("department", new Department());
         model.addAttribute("allDepartmentList", deptService.getDepartments());
         model.addAttribute("selectedDepartmentList", deptService.getSelectedDepts(statusID));
@@ -41,12 +46,14 @@ public class DeptController {
     }
 
     @PostMapping("/getDepartmentDetails")
-    public String getDepartmentDetails(Model model,@ModelAttribute("department") Department department) {
+    public String getDepartmentDetails(Model model, @ModelAttribute("department") Department department) {
         model.addAttribute("deptStatus", deptService.getStatus());
-       // model.addAttribute("allDepartmentList", deptService.getDepartments());
-        model.addAttribute("selectedDepartmentList", deptService.getSelectedDepts(department.getStatus().getStatusId()));
+        // model.addAttribute("allDepartmentList", deptService.getDepartments());
+        model.addAttribute("selectedDepartmentList",
+                deptService.getSelectedDepts(department.getStatus().getStatusId()));
         return "index";
     }
+
     @GetMapping("/addDepartment")
     public String addNewDepartment(Model model) {
         Department dept = new Department();
@@ -54,18 +61,18 @@ public class DeptController {
         model.addAttribute("department", dept);
         return "newDepartment";
     }
-   
+
     @PostMapping("/addDepartment")
     public String addDepartment(@ModelAttribute("department") Department department, Model model) {
         deptService.createDepartment(department);
-        model.addAttribute("allDepartmentList", deptService.getDepartments()); 
+        model.addAttribute("allDepartmentList", deptService.getDepartments());
         return "newDepartment";
     }
- 
+
     @PostMapping("/addStatus")
     public String addDept(@ModelAttribute("departmentStatus") DepartmentStatus departmentStatus, Model model) {
         deptService.createDepartmentStatus(departmentStatus);
-        model.addAttribute("allDepartmentList", deptService.getDepartments()); 
+        model.addAttribute("allDepartmentList", deptService.getDepartments());
         model.addAttribute("department", new Department());
         model.addAttribute("deptStatus", deptService.getStatus());
         return "newDepartment";
@@ -86,8 +93,8 @@ public class DeptController {
     @GetMapping("/deleteDept/{id}")
     public String deleteThroughId(@PathVariable(value = "id") int id, Model model) {
         deptService.deleteDeptByID(id);
-        model.addAttribute("allDepartmentList",  deptService.getDepartments());
-        model.addAttribute("department",  new Department());
+        model.addAttribute("allDepartmentList", deptService.getDepartments());
+        model.addAttribute("department", new Department());
         return "newDepartment";
     }
 
@@ -98,10 +105,11 @@ public class DeptController {
         model.addAttribute("states", state);
         return state;
     }
+
     @GetMapping("/counties")
     @ResponseBody
     public List<County> populateList(@RequestParam("stateId") Integer stateId) {
-        return  countyService.getCountiesByStateId(stateId);
+        return countyService.getCountiesByStateId(stateId);
     }
 
     @ModelAttribute("deptStatus")
