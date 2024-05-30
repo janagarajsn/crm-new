@@ -16,8 +16,10 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.wnwa.crm.dao.DepartmentRepository;
 import com.wnwa.crm.dao.DeptStatusRepository;
@@ -26,6 +28,7 @@ import com.wnwa.crm.entity.Department;
 import com.wnwa.crm.entity.DepartmentStatus;
 import com.wnwa.crm.entity.State;
 
+@ExtendWith(MockitoExtension.class)
 public class DepartmentServiceTest {
     @Mock
     private DepartmentRepository deptRepositoryMock;
@@ -46,15 +49,16 @@ public class DepartmentServiceTest {
         County county = new County();
         county.setCountyId(1);
 
-        DepartmentStatus status = new DepartmentStatus();
-        status.setStatusId(1);
+        departmentStatus = new DepartmentStatus();
+        departmentStatus.setStatusId(1);
+        departmentStatus.setStatus("Demo Done");
 
         dept = new Department();
         dept.setDepartmentId(1);
         dept.setState(state);
         dept.setCounty(county);
         dept.setDepartmentName("HR");
-        dept.setStatus(status);
+        dept.setStatus(departmentStatus);
         dept.setComments("Human Resources Department");
         dept.setReminderDate(LocalDateTime.now().plusDays(30));
         dept.setCreationDate(LocalDateTime.now());
@@ -62,7 +66,7 @@ public class DepartmentServiceTest {
     }
 
     @Test
-    public void createDepartmentTest(Department dept) {
+    public void createDepartmentTest() {
 
         when(deptRepositoryMock.save(any(Department.class))).thenReturn(dept);
         Department createdDept = deptService.createDepartment(dept);
@@ -73,12 +77,12 @@ public class DepartmentServiceTest {
     }
 
     @Test
-    public void createDepartmentStatusTest(DepartmentStatus depts) {
-        when(deptStatusRepoMock.save(any(DepartmentStatus.class))).thenReturn(depts);
-        DepartmentStatus createdDeptStatus = deptService.createDepartmentStatus(depts);
+    public void createDepartmentStatusTest() {
+        when(deptStatusRepoMock.save(any(DepartmentStatus.class))).thenReturn(departmentStatus);
+        DepartmentStatus createdDeptStatus = deptService.createDepartmentStatus(departmentStatus);
         assertNotNull(createdDeptStatus);
-        assertEquals(depts.getStatusId(), createdDeptStatus.getStatusId());
-        verify(deptStatusRepoMock, times(1)).save(depts);
+        assertEquals(departmentStatus.getStatusId(), createdDeptStatus.getStatusId());
+        verify(deptStatusRepoMock, times(1)).save(departmentStatus);
 
     }
 

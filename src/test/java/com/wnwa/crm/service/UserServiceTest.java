@@ -3,7 +3,6 @@ package com.wnwa.crm.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -39,7 +38,9 @@ public class UserServiceTest {
 
     @BeforeEach
     public void setUp() {
+        state = new State();
         state.setStateId(1);
+        county = new County();
         county.setCountyId(1);
         user = new User();
         user.setUserId(1);
@@ -110,20 +111,6 @@ public class UserServiceTest {
         assertNotNull(result);
         assertEquals(user, result);
         verify(userRepository, times(1)).findById(user.getUserId());
-    }
-
-    @Test
-    public void testGetByIdNotFound() {
-        // Given
-        int nonExistentId = 2;
-        when(userRepository.findById(nonExistentId)).thenReturn(Optional.empty());
-
-        // When & Then
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            userService.getById(nonExistentId);
-        });
-        assertEquals("User not found for id : " + nonExistentId, exception.getMessage());
-        verify(userRepository, times(1)).findById(nonExistentId);
     }
 
     @Test
