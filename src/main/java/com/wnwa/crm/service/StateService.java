@@ -29,20 +29,6 @@ public class StateService {
       return stateRepository.findAll();
    }
 
-   public State updateState(State state) {
-      State existingState = null;
-      Optional<State> optionalDept = stateRepository.findById(state.getStateId());
-      if (optionalDept.isPresent()) {
-         existingState = optionalDept.get();
-         existingState.setStateCode(state.getStateCode());
-         existingState.setStateName(state.getStateName());
-         stateRepository.save(existingState);
-      } else {
-         return new State();
-      }
-      return existingState;
-   }
-
    public String deleteStateByID(Integer id) {
       stateRepository.deleteById(id);
       return "State got deleted";

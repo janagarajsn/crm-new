@@ -48,20 +48,6 @@ public class DepartmentService {
       return deptRepository.findAll();
    }
 
-   public Department updateDept(Department dept) {
-      Department existingDept = null;
-      Optional<Department> optionalDept = deptRepository.findById(dept.getDepartmentId());
-      if (optionalDept.isPresent()) {
-         existingDept = optionalDept.get();
-         existingDept.setDepartmentName(dept.getDepartmentName());
-         //existingDept.setState(dept.getState());
-         deptRepository.save(existingDept);
-      } else {
-         return new Department();
-      }
-      return existingDept;
-   }
-
    public String deleteDeptByID(int id) {
       deptRepository.deleteById(id);
       return "Department Deleted";

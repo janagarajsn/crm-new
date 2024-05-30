@@ -26,22 +26,7 @@ public class CountyService {
       return countyRepository.findAll();
    } 
 
-
-   public County updateCounty(County county) {
-      County existingCounty = null;
-      Optional<County> optionalDept = countyRepository.findById(county.getCountyId());
-      if (optionalDept.isPresent()) {
-         existingCounty = optionalDept.get();
-         existingCounty.setState(county.getState());;
-         existingCounty.setCountyName(county.getCountyName());
-         countyRepository.save(existingCounty);
-      } else {
-         return new County();
-      }
-      return existingCounty;
-   }
-
-   public String deleteCountyByID(Integer id) {
+  public String deleteCountyByID(Integer id) {
       countyRepository.deleteById(id);
       return "County Deleted";
    }
