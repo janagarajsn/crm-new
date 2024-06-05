@@ -34,5 +34,9 @@ jobs:
         echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
     - name: Build with Maven
       run: mvn clean package
+    - name: Setup PEM File
+      run: |
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
+        chmod 600 key.pem
     - name: List the files
-      run: ls -ltr
+      run: cd target && ls -ltr
