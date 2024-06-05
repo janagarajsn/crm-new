@@ -13,6 +13,9 @@
 	<div class="container">
 		<hr>
 		<h2 align = "center">Add New County</h2>
+		<div th:if="${successMessage}" class="alert alert-success" role="alert">
+            <span th:text="${successMessage}"></span>
+        </div>
 		<form action="#" th:action="@{/addCounty}" th:object="${county}"
 			method="POST">
 			  <label for="state">Choose State</label>

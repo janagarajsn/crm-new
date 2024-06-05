@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Error</title>
+    <link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        .error-container {
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            border-radius: 10px;
+        }
+        h1 {
+            color: red;
+            font-size: 2em;
+        }
+        p {
+            color: #333;
+            font-size: 1.2em;
+        }
+       
+    </style>
+</head>
+<body>
+    <div th:insert="~{fragments/navbar :: navbar}">  </div>
+    <h1 class="error-container">An error occurred</h1>
+    <p th:text="${errorMessage}"></p>
+    <a href="/">Go back to home</a>
+</body>
+</html>

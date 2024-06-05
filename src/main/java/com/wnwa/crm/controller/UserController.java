@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.wnwa.crm.entity.Department;
 import com.wnwa.crm.entity.State;
 import com.wnwa.crm.entity.User;
-import com.wnwa.crm.service.CountyService;
 import com.wnwa.crm.service.DepartmentService;
 import com.wnwa.crm.service.StateService;
 import com.wnwa.crm.service.UserService;
@@ -24,8 +24,7 @@ import com.wnwa.crm.service.UserService;
 @Controller
 public class UserController {
 
-    @Autowired
-    private CountyService countyService;
+   
     @Autowired
     private DepartmentService departmentService;
     @Autowired
@@ -43,10 +42,11 @@ public class UserController {
     }
 
     @PostMapping("/addUser")
-    public String addNewUser(@ModelAttribute("user") User user, Model model) {
+    public String addNewUser(@ModelAttribute("user") User user, Model model, RedirectAttributes redirectAttributes) {
         userService.createUser(user);
         model.addAttribute("allUserList", userService.getUsers());
-        return "addNewUser";
+        redirectAttributes.addFlashAttribute("successMessage", "User Added/Updated!");
+        return "redirect:/addUser";
     }
 
     @GetMapping("/updateUser/{id}")
@@ -57,12 +57,13 @@ public class UserController {
     }
 
     @GetMapping("/deleteUser/{id}")
-    public String deleteThroughId(@PathVariable(value = "id") Integer id, Model model) {
+    public String deleteThroughId(@PathVariable(value = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
         User user = new User();
-        countyService.deleteCountyByID(id);
+        userService.deleteUserByID(id);
         model.addAttribute("allUserList", userService.getUsers());
         model.addAttribute("user", user);
-        return "addNewUser";
+        redirectAttributes.addFlashAttribute("successMessage", "User Deleted!");
+        return "redirect:/addUser";
     }
   @ModelAttribute("states")
     public List<State> populateStates(Model model) {

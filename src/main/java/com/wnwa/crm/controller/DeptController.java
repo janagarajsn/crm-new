@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.wnwa.crm.entity.County;
 import com.wnwa.crm.entity.Department;
@@ -63,19 +64,21 @@ public class DeptController {
     }
 
     @PostMapping("/addDepartment")
-    public String addDepartment(@ModelAttribute("department") Department department, Model model) {
+    public String addDepartment(@ModelAttribute("department") Department department, Model model, RedirectAttributes redirectAttributes) {
         deptService.createDepartment(department);
         model.addAttribute("allDepartmentList", deptService.getDepartments());
-        return "newDepartment";
+        redirectAttributes.addFlashAttribute("successMessage", "Department Added/Updated!");
+        return "redirect:/addDepartment";
     }
 
     @PostMapping("/addStatus")
-    public String addDept(@ModelAttribute("departmentStatus") DepartmentStatus departmentStatus, Model model) {
+    public String addDept(@ModelAttribute("departmentStatus") DepartmentStatus departmentStatus, Model model, RedirectAttributes redirectAttributes) {
         deptService.createDepartmentStatus(departmentStatus);
         model.addAttribute("allDepartmentList", deptService.getDepartments());
         model.addAttribute("department", new Department());
-        model.addAttribute("deptStatus", deptService.getStatus());
-        return "newDepartment";
+        model.addAttribute("deptStatus", deptService.getStatus());    
+        redirectAttributes.addFlashAttribute("successMessage", "New Status Added!");
+        return "redirect:/addDepartment";
     }
 
     @GetMapping("/getDepartments")
@@ -91,11 +94,12 @@ public class DeptController {
     }
 
     @GetMapping("/deleteDept/{id}")
-    public String deleteThroughId(@PathVariable(value = "id") int id, Model model) {
+    public String deleteThroughId(@PathVariable(value = "id") int id, Model model, RedirectAttributes redirectAttributes) {
         deptService.deleteDeptByID(id);
         model.addAttribute("allDepartmentList", deptService.getDepartments());
         model.addAttribute("department", new Department());
-        return "newDepartment";
+        redirectAttributes.addFlashAttribute("successMessage", "Department Deleted!");
+        return "redirect:/addDepartment";
     }
 
     @ModelAttribute("states")

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.wnwa.crm.entity.County;
 import com.wnwa.crm.entity.State;
@@ -33,10 +34,11 @@ public class CountyController {
     }
 
     @PostMapping("/addCounty")
-    public String addCounty(@ModelAttribute("county") County county, Model model) {
+    public String addCounty(@ModelAttribute("county") County county, Model model, RedirectAttributes redirectAttributes) {
         countyService.createCounty(county);
         model.addAttribute("allCountyList", countyService.getCounties());
-        return "newCounty";
+       redirectAttributes.addFlashAttribute("successMessage", "County Added/Updated!");
+        return "redirect:/addCounty";
     }
 
     @GetMapping("/updateCounty/{id}")
@@ -47,12 +49,13 @@ public class CountyController {
     }
 
     @GetMapping("/deleteCounty/{id}")
-    public String deleteThroughId(@PathVariable(value = "id") Integer id, Model model) {
+    public String deleteThroughId(@PathVariable(value = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
         County county = new County();
         countyService.deleteCountyByID(id);
         model.addAttribute("allCountyList", countyService.getCounties());
         model.addAttribute("county", county);
-        return "newCounty";
+        redirectAttributes.addFlashAttribute("successMessage", "County Deleted!");
+        return "redirect:/addCounty";
     }
 
     @ModelAttribute("states")
