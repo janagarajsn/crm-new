@@ -10,9 +10,6 @@
 <body>
 	<div th:insert="~{fragments/navbar :: navbar}">  </div>
 	<div class="container">
-		<hr>
-		<h2 align = "center">Update County</h2>
-
 		<form action="#" th:action="@{/addCounty}" th:object="${county}"
 			method="POST">
 			

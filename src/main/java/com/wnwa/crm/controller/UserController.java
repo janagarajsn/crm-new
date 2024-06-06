@@ -36,9 +36,10 @@ public class UserController {
     @GetMapping("/addUser")
     public String addNewUser(Model model) {
         User user = new User();
+        model.addAttribute("pageTitle", "Add User Details");
         model.addAttribute("allUserList", userService.getUsers());
         model.addAttribute("user", user);
-        return "addNewUser";
+        return "newUser";
     }
 
     @PostMapping("/addUser")
@@ -51,6 +52,7 @@ public class UserController {
 
     @GetMapping("/updateUser/{id}")
     public String updateForm(@PathVariable(value = "id") Integer id, Model model) {
+        model.addAttribute("pageTitle", "Update User Details");
         User user = userService.getById(id);
         model.addAttribute("user", user);
         return "updateUser";

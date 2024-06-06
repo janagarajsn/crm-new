@@ -11,8 +11,6 @@
 <body>
 	<div th:insert="~{fragments/navbar :: navbar}">  </div>
 	<div class="container">
-		<hr>
-		<h2 align = "center">Add New County</h2>
 		<div th:if="${successMessage}" class="alert alert-success" role="alert">
             <span th:text="${successMessage}"></span>
         </div>

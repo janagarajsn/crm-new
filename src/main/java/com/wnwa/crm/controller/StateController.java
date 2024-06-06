@@ -21,6 +21,7 @@ public class StateController {
     @GetMapping("/addState")
     public String addNewState(Model model) {
         State state = new State();
+        model.addAttribute("pageTitle", "Add State");
         model.addAttribute("allStateList", stateService.getStates());
         model.addAttribute("state", state);
         return "newState";
@@ -36,7 +37,8 @@ public class StateController {
 
     @GetMapping("/updateState/{id}")
     public String updateForm(@PathVariable(value = "id") Integer id, Model model) {
-        State state = stateService.getById(id);
+        State state = stateService.getById(id);       
+        model.addAttribute("pageTitle", "Update State");
         model.addAttribute("state", state);
         model.addAttribute("allStateList", stateService.getStates());
         return "updateState";
