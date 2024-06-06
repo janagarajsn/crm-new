@@ -48,5 +48,10 @@ jobs:
       env:
         USERNAME: ${{ secrets.SSH_USERNAME }}
         SERVER: ${{ secrets.SSH_SERVER }}
+        SMTP_PWD: ${{ secrets.SMTP_PWD }}
+        SMTP_USRNME: ${{ secrets.SMTP_USRNME }}
+        DB_URL: ${{ secrets.DB_URL }}
+        DB_USERNAME: ${{ secrets.DB_USERNAME }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       run: |
-        ssh -i key.pem -o StrictHostKeyChecking=no $USERNAME@$SERVER 'nohup java -Xms256m -Xmx1024m -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/home/ubuntu/crm-deploy -jar /home/ubuntu/crm-deploy/crm-new.jar > /home/ubuntu/crm-deploy/crm-new.log 2>&1 &'
+        ssh -i key.pem -o StrictHostKeyChecking=no $USERNAME@$SERVER 'export SMTP_PWD="${{ secrets.SMTP_PWD }}" SMTP_USRNME="${{ secrets.SMTP_USRNME }}" DB_URL="${{ secrets.DB_URL }}" DB_USERNAME="${{ secrets.DB_USERNAME }}" DB_PASSWORD="${{ secrets.DB_PASSWORD }}"; nohup java -Xms256m -Xmx1024m -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/home/ubuntu/crm-deploy -jar /home/ubuntu/crm-deploy/crm-new.jar > /home/ubuntu/crm-deploy/crm-new.log 2>&1 &'
