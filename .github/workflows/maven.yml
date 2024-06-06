@@ -38,11 +38,15 @@ jobs:
       run: |
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
         chmod 600 key.pem
-    - name: List the files
-      run: cd target && ls -ltr
     - name: Transfer the jar file to server
       env:
         USERNAME: ${{ secrets.SSH_USERNAME }}
         SERVER: ${{ secrets.SSH_SERVER }}
       run: |
         scp -i key.pem -o StrictHostKeyChecking=no target/crm-new.jar $USERNAME@$SERVER:/home/ubuntu/crm-deploy
+    - name: Run application
+      env:
+        USERNAME: ${{ secrets.SSH_USERNAME }}
+        SERVER: ${{ secrets.SSH_SERVER }}
+      run: |
+        scp -i key.pem -o StrictHostKeyChecking=no $USERNAME@$SERVER 'nohup java -Xms256m -Xmx1024m -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/home/ubuntu/crm-deploy -jar /home/ubuntu/crm-deploy/crm-new.jar > /home/ubuntu/crm-deploy/crm-new.log 2>&1 &'
