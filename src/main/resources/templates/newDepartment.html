@@ -64,15 +64,12 @@
 				</div>
 			</div>
 		</div>
-		<hr>
-		<h2 align="center">Add New Department</h2>
 		<div th:if="${successMessage}" class="alert alert-success" role="alert">
             <span th:text="${successMessage}"></span>
         </div>
 		<form action="#" th:action="@{/addDepartment}" th:object="${department}" method="POST">
 			<label for="status">Choose Status</label> &nbsp;&nbsp;&nbsp;
-			<i class="fas fa-plus" style="cursor: pointer;" data-toggle="modal" data-target="#exampleModal"
-				title="Add a new status"></i>
+			<i class="fas fa-plus" style="cursor: pointer;" data-toggle="modal" data-target="#exampleModal" title="Add a new status"></i>
 			<select class="form-control mb-4 col-4" th:field="*{status}">
 				<option th:each="status:${deptStatus}" th:text="${status.status}" th:value="${status.statusId}">
 				</option>

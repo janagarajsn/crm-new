@@ -40,12 +40,13 @@ public class DeptController {
              statusID = statusList.get(0).getStatusId();
         }
        
+        model.addAttribute("pageTitle", "Departments Status Report");
         model.addAttribute("department", new Department());
         model.addAttribute("allDepartmentList", deptService.getDepartments());
         model.addAttribute("selectedDepartmentList", deptService.getSelectedDepts(statusID));
         return "index";
     }
-
+    
     @PostMapping("/getDepartmentDetails")
     public String getDepartmentDetails(Model model, @ModelAttribute("department") Department department) {
         model.addAttribute("deptStatus", deptService.getStatus());
@@ -58,6 +59,7 @@ public class DeptController {
     @GetMapping("/addDepartment")
     public String addNewDepartment(Model model) {
         Department dept = new Department();
+        model.addAttribute("pageTitle", "Add Department");
         model.addAttribute("allDepartmentList", deptService.getDepartments());
         model.addAttribute("department", dept);
         return "newDepartment";
@@ -89,6 +91,7 @@ public class DeptController {
     @GetMapping("/updateDept/{id}")
     public String updateForm(@PathVariable(value = "id") int id, Model model) {
         Department department = deptService.getById(id);
+        model.addAttribute("pageTitle", "Update Department");
         model.addAttribute("department", department);
         return "updateDept";
     }

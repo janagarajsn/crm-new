@@ -66,29 +66,20 @@ function departmentDropDown(){
 <body>
 	<div th:insert="~{fragments/navbar :: navbar}">  </div>
 	<div class="container">
-		<hr>
-		<h2 align = "center">Update User</h2>
-		
 		<form action="#" th:action="@{/addUser}" th:object="${user}"
 			method="POST">
 			<input type="hidden" th:field="*{userId}" />
-			<label for="state">Choose State</label>
-			<select class="form-control mb-4 col-4" th:field="*{state}" >
+			<label for="stateDropdown">Choose State</label>
+			<select class="form-control mb-4 col-4" id = "stateDropdown" th:field="*{state}" onchange="countyDropDown()">
 				<option th:each="state:${states}" 
 						th:text="${state.stateName}"
 						th:value="${state.stateId}" ></option> 
 			</select> 
-			<label for="county">Choose County</label>
-				<select class="form-control mb-4 col-4" th:field="*{county.countyName}" id = "countyDropdown" onchange="countyDropDown()">
-				<option th:each="county:${counties}" 
-						th:text="${county.countyName}"
-						th:value="${county.countyId}" ></option> 
+			<label for="countyDropDown">Choose County</label>
+				<select class="form-control mb-4 col-4" id = "countyDropdown" th:field="*{county}" onchange="departmentDropDown()">
 			</select> 
-			<label for="department">Choose Department</label>
-				<select class="form-control mb-4 col-4" th:field="*{department.departmentName}" onchange="departmentDropDown()">
-				<option th:each="department:${departments}" 
-						th:text="${department.departmentName}"
-						th:value="${department.departmentId}" ></option> 
+			<label for="deptDropDown">Choose Department</label>
+				<select class="form-control mb-4 col-4" th:field="*{department}" id = "deptDropDown" >
 			</select> 
 			<label for="userName">User Name</label>
 			<input type="text"

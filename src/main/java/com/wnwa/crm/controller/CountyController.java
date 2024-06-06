@@ -28,6 +28,7 @@ public class CountyController {
     @GetMapping("/addCounty")
     public String addNewCounty(Model model) {
         County county = new County();
+        model.addAttribute("pageTitle", "Add County");
         model.addAttribute("allCountyList", countyService.getCounties());
         model.addAttribute("county", county);
         return "newCounty";
@@ -43,7 +44,8 @@ public class CountyController {
 
     @GetMapping("/updateCounty/{id}")
     public String updateForm(@PathVariable(value = "id") Integer id, Model model) {
-        County county = countyService.getById(id);
+        County county = countyService.getById(id);        
+        model.addAttribute("pageTitle", "Update County");
         model.addAttribute("county", county);
         return "updateCounty";
     }

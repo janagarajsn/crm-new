@@ -71,7 +71,6 @@ function departmentDropDown(){
 <body>
 	<div th:insert="~{fragments/navbar :: navbar}">  </div>
 	<div class="container">
-		<h2 align = "center">Add New User</h2>
 		<form action="#" th:action="@{/addUser}" th:object="${user}"
 			method="POST">
 			<label for="stateDropdown">Choose State</label>
