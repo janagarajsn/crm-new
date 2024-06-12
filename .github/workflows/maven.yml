@@ -53,4 +53,26 @@ jobs:
         S3_PATH: crm-new.jar
       run: |
         aws s3 cp $FILE_PATH s3://$BUCKET_NAME/$S3_PATH
+    - name: Setup PEM File
+      run: |
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
+        chmod 600 key.pem
+    - name: Download the jar file from S3
+      env:
+        USERNAME: ${{ secrets.SSH_USERNAME }}
+        SERVER: ${{ secrets.SSH_SERVER }}
+        BUCKET_NAME: crmnew-artifact
+      run: |
+        ssh -i key.pem -o StrictHostKeyChecking=no $USERNAME@$SERVER 'aws s3 cp s3:://$BUCKET_NAME/crm-new.jar /home/ubuntu/crm-deploy/crm-new.jar
+    - name: Run application
+      env:
+        USERNAME: ${{ secrets.SSH_USERNAME }}
+        SERVER: ${{ secrets.SSH_SERVER }}
+        SMTP_PWD: ${{ secrets.SMTP_PWD }}
+        SMTP_USRNME: ${{ secrets.SMTP_USRNME }}
+        DB_URL: ${{ secrets.DB_URL }}
+        DB_USERNAME: ${{ secrets.DB_USERNAME }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      run: |
+        ssh -i key.pem -o StrictHostKeyChecking=no $USERNAME@$SERVER 'export SMTP_PWD="${{ secrets.SMTP_PWD }}" SMTP_USRNME="${{ secrets.SMTP_USRNME }}" DB_URL="${{ secrets.DB_URL }}" DB_USERNAME="${{ secrets.DB_USERNAME }}" DB_PASSWORD="${{ secrets.DB_PASSWORD }}"; nohup java -Xms256m -Xmx1024m -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/home/ubuntu/crm-deploy -jar /home/ubuntu/crm-deploy/crm-new.jar > /home/ubuntu/crm-deploy/crm-new.log 2>&1 &'
         
