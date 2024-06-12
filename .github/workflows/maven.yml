@@ -63,7 +63,7 @@ jobs:
         SERVER: ${{ secrets.SSH_SERVER }}
         BUCKET_NAME: crmnew-artifact
       run: |
-        ssh -i key.pem -o StrictHostKeyChecking=no $USERNAME@$SERVER 'aws s3 cp s3:://$BUCKET_NAME/crm-new.jar /home/ubuntu/crm-deploy/crm-new.jar'
+        ssh -i key.pem -o StrictHostKeyChecking=no $USERNAME@$SERVER 'aws s3 cp s3://$BUCKET_NAME/crm-new.jar /home/ubuntu/crm-deploy/crm-new.jar'
     - name: Run application
       env:
         USERNAME: ${{ secrets.SSH_USERNAME }}
